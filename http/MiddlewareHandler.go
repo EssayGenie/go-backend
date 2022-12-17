@@ -1,8 +1,7 @@
-package handler
+package http
 
 import (
 	"context"
-	ghttp "go-backend/http"
 	"net/http"
 )
 
@@ -12,7 +11,7 @@ func (mh MiddlewareHandler) serve(next http.Handler, w http.ResponseWriter, r *h
 	ctx, err := mh(w, r)
 	if err != nil {
 		// handling error
-		ghttp.HandleError(err, w, r)
+		HandleError(err, w, r)
 		return
 	}
 	if ctx != nil {

@@ -2,7 +2,6 @@ package http
 
 import (
 	"github.com/go-chi/chi/v5"
-	"go-backend/http/handler"
 	"net/http"
 )
 
@@ -22,23 +21,23 @@ func (r *Router) Route(pattern string, fn func(*Router)) {
 	})
 }
 
-func (r *Router) Get(pattern string, fn handler.ApiHandler) {
-	r.chi.Get(pattern, handler.Handler(fn))
+func (r *Router) Get(pattern string, fn ApiHandler) {
+	r.chi.Get(pattern, Handler(fn))
 }
 
-func (r *Router) Post(pattern string, fn handler.ApiHandler) {
-	r.chi.Post(pattern, handler.Handler(fn))
+func (r *Router) Post(pattern string, fn ApiHandler) {
+	r.chi.Post(pattern, Handler(fn))
 }
-func (r *Router) Put(pattern string, fn handler.ApiHandler) {
-	r.chi.Put(pattern, handler.Handler(fn))
-}
-
-func (r *Router) Delete(pattern string, fn handler.ApiHandler) {
-	r.chi.Delete(pattern, handler.Handler(fn))
+func (r *Router) Put(pattern string, fn ApiHandler) {
+	r.chi.Put(pattern, Handler(fn))
 }
 
-func (r *Router) With(fn handler.MiddlewareHandler) *Router {
-	c := r.chi.With(handler.GetMiddleware(fn))
+func (r *Router) Delete(pattern string, fn ApiHandler) {
+	r.chi.Delete(pattern, Handler(fn))
+}
+
+func (r *Router) With(fn MiddlewareHandler) *Router {
+	c := r.chi.With(GetMiddleware(fn))
 	return &Router{chi: c}
 }
 
@@ -47,8 +46,8 @@ func (r *Router) WithBypass(fn func(next http.Handler) http.Handler) *Router {
 	return &Router{chi: c}
 }
 
-func (r *Router) Use(fn handler.MiddlewareHandler) {
-	r.chi.Use(handler.GetMiddleware(fn))
+func (r *Router) Use(fn MiddlewareHandler) {
+	r.chi.Use(GetMiddleware(fn))
 }
 
 func (r *Router) UseBypass(fn func(next http.Handler) http.Handler) {
