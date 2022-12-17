@@ -1,17 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"go-backend/cmd"
+	"log"
+	"os"
 )
 
-func hello(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "hello\n")
-}
-
 func main() {
-
-	http.HandleFunc("/hello", hello)
-
-	http.ListenAndServe(":8090", nil)
+	// save here in the directory as logfile
+	logFile, err := os.OpenFile("logfile", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalln("Unable to set logfile:", err.Error())
+	}
+	log.SetOutput(logFile)
+	cmd.Execute()
 }
