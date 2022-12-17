@@ -38,6 +38,10 @@ func handleError(err error, w http.ResponseWriter, r *http.Request) {
 		} else {
 			log.Println("INFO :", e.Cause())
 		}
+		if jsonErr := SendJSON(w, e.Code, e); jsonErr != nil {
+			log.Println("ERROR :", jsonErr)
+			handleError(jsonErr, w, r)
+		}
 	default:
 		log.Println("UNHANDLED FATAL ERROR :", e)
 		w.WriteHeader(http.StatusInternalServerError)
