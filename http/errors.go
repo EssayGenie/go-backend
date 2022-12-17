@@ -11,6 +11,7 @@ type Error struct {
 	Message         string
 	InternalMessage string `json:"-"`
 	InternalError   error  `json:"-"`
+	ErrorId         string `json:"error_id,omitempty"`
 }
 
 func NewError(code int, message string, args ...interface{}) *Error {
