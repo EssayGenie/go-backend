@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"go-backend/conf"
 	ghttp "go-backend/http"
 	"log"
@@ -10,13 +9,13 @@ import (
 )
 
 type Restful struct {
-	config  *conf.Configuration
+	config  *conf.GlobalConfiguration
 	handler http.Handler
 }
 
-func (rs *Restful) ListenAndServe(host string, port uint32) {
+func (rs *Restful) ListenAndServe(endpoint string) {
 	server := &http.Server{
-		Addr:    fmt.Sprintf("%s:%d", host, port),
+		Addr:    endpoint,
 		Handler: rs.handler,
 	}
 
@@ -35,7 +34,7 @@ func (rs *Restful) ListenAndServe(host string, port uint32) {
 	}()
 }
 
-func RegisterEndpoints(gc *conf.Configuration) *Restful {
+func RegisterEndpoints(gc *conf.GlobalConfiguration) *Restful {
 	rs := &Restful{
 		config: gc,
 	}
