@@ -4,8 +4,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      docker: 18
-      go: 1.19
+      golang: 1.19
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
