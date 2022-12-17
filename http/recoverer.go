@@ -7,27 +7,28 @@ import (
 	"runtime/debug"
 )
 
-// Recoverer is a middleware that recovers from panics, logs the panic (and a backtrace)
-// then returns a HTTP 500 (Internal Server HTTPError) status if possible.
-// Recoverer prints a request ID if one is provided.
+/*
+Recoverer is a middleware that recovers from panics, logs the panic (and a backtrace)
+then returns a HTTP 500 (Internal Server HTTPError) status if possible.
+Recoverer prints a request ID if one is provided.
+*/
+
 func Recoverer(w http.ResponseWriter, r *http.Request) (context.Context, error) {
 	defer func() {
 		if healer := recover(); healer != nil {
 			log.Printf("PANIC: %v", debug.Stack())
-
 			he := &HTTPError{
 				Code:    http.StatusInternalServerError,
 				Message: http.StatusText(http.StatusInternalServerError),
 			}
-
-			handleError(he, w, r)
+			HandleError(he, w, r)
 		}
 	}()
 
 	return nil, nil
 }
 
-func handleError(err error, w http.ResponseWriter, r *http.Request) {
+func HandleError(err error, w http.ResponseWriter, r *http.Request) {
 	errorId := GetRequestId(r.Context())
 	switch e := err.(type) {
 	case *HTTPError:
@@ -40,7 +41,7 @@ func handleError(err error, w http.ResponseWriter, r *http.Request) {
 		}
 		if jsonErr := SendJSON(w, e.Code, e); jsonErr != nil {
 			log.Println("ERROR :", jsonErr)
-			handleError(jsonErr, w, r)
+			HandleError(jsonErr, w, r)
 		}
 	default:
 		log.Println("UNHANDLED FATAL ERROR :", e)
