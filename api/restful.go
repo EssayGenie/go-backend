@@ -32,6 +32,10 @@ func (rs *Restful) ListenAndServe(endpoint string) {
 			return
 		}
 	}()
+
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal("API server failed")
+	}
 }
 
 func RegisterEndpoints(gc *conf.GlobalConfiguration) *Restful {
