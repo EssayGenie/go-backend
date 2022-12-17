@@ -10,7 +10,7 @@ import (
 	"syscall"
 )
 
-func Termination(done <-chan struct{}) {
+func Terminate(done <-chan struct{}) {
 	signalChan := make(chan os.Signal)
 	signal.Notify(signalChan, syscall.SIGTERM, syscall.SIGINT)
 	select {
@@ -21,7 +21,7 @@ func Termination(done <-chan struct{}) {
 	}
 }
 
-func AddRequestId(w http.ResponseWriter, r *http.Request) (context.Context, error) {
+func AddRequestId(_ http.ResponseWriter, r *http.Request) (context.Context, error) {
 	canonicId, err := nanoid.Standard(21)
 	if err != nil {
 		return nil, err
