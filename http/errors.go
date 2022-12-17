@@ -6,16 +6,16 @@ import (
 	"net/http"
 )
 
-type Error struct {
+type HTTPError struct {
 	Code            int
 	Message         string
 	InternalMessage string `json:"-"`
 	InternalError   error  `json:"-"`
-	ErrorId         string `json:"error_id,omitempty"`
+	ErrorID         string `json:"error_id,omitempty"`
 }
 
-func NewError(code int, message string, args ...interface{}) *Error {
-	return &Error{
+func NewHTTPError(code int, message string, args ...interface{}) *HTTPError {
+	return &HTTPError{
 		Code:            code,
 		Message:         fmt.Sprintf(message, args...),
 		InternalMessage: fmt.Sprintf(message, args...),
@@ -23,27 +23,27 @@ func NewError(code int, message string, args ...interface{}) *Error {
 	}
 }
 
-func (e *Error) Error() error {
-	log.Printf("Error: %s", e.InternalError)
-	return e.InternalError
-}
-
-func (e *Error) ErrorMessage() string {
+func (e *HTTPError) Error() string {
+	log.Printf("HTTPError: %s", e.InternalError)
 	return e.Message
 }
 
-func InternalServerError(message string, args ...interface{}) *Error {
-	return NewError(http.StatusInternalServerError, message, args...)
+func (e *HTTPError) Cause() error {
+	return e.InternalError
 }
 
-func BadRequestError(message string, args ...interface{}) *Error {
-	return NewError(http.StatusBadRequest, message, args...)
+func InternalServerError(message string, args ...interface{}) *HTTPError {
+	return NewHTTPError(http.StatusInternalServerError, message, args...)
 }
 
-func UnauthorizedError(message string, args ...interface{}) *Error {
-	return NewError(http.StatusUnauthorized, message, args...)
+func BadRequestError(message string, args ...interface{}) *HTTPError {
+	return NewHTTPError(http.StatusBadRequest, message, args...)
 }
 
-func NotFoundError(message string, args ...interface{}) *Error {
-	return NewError(http.StatusNotFound, message, args...)
+func UnauthorizedError(message string, args ...interface{}) *HTTPError {
+	return NewHTTPError(http.StatusUnauthorized, message, args...)
+}
+
+func NotFoundError(message string, args ...interface{}) *HTTPError {
+	return NewHTTPError(http.StatusNotFound, message, args...)
 }
