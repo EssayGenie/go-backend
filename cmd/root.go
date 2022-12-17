@@ -23,12 +23,13 @@ func Execute() {
 }
 
 func initConfig() {
+	profile := initProfile()
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		viper.AddConfigPath(".")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName("config")
+		viper.SetConfigName(profile)
 	}
 
 	viper.AutomaticEnv()
@@ -38,6 +39,16 @@ func initConfig() {
 	}
 }
 
+func initProfile() string {
+	profile := os.Getenv("go_profile")
+	if profile == "" {
+		profile = "dev"
+	}
+	fmt.Println("profile:", profile)
+	return profile
+}
+
 func init() {
 	cobra.OnInitialize(initConfig)
+	rootCmd.AddCommand(serveCmd)
 }
