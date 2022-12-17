@@ -26,3 +26,7 @@ func (mh MiddlewareHandler) middlewareHandlerImpl(next http.Handler) http.Handle
 		mh.serve(next, w, r)
 	})
 }
+
+func GetMiddleware(fn MiddlewareHandler) func(http.Handler) http.Handler {
+	return fn.middlewareHandlerImpl
+}
