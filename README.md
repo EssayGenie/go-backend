@@ -4,10 +4,14 @@
 ## Frontend
 * KakaoTalk Plus Friend
 ## Backend
-* Go-chi, [Colly](https://github.com/gocolly/colly)
+* Go-chi, [Colly](https://github.com/gocolly/colly), Cobra, Vyper
 * OpenGPT API, Papago API, and Quillbot API
 ## Usage
 ```
 > 한국 사회의 저출생 고령화 문제에 대해 200자 이내로 작성해주세요.
 > Korea is facing a major demographic challenge in the form of a low birth rate and aging population. This problem has been developing for several decades, and is now reaching a critical point. The consequences of this demographic shift are significant and far-reaching, and will require careful planning and effective policy intervention to address.
+```
+## How to start
+```
+$ go run main.go serve
 ```
