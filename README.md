@@ -14,4 +14,8 @@
 ## How to start
 ```
 $ go run main.go serve
+$ docker build --no-cache -t eg:0.9 .
+$ sudo docker run -itd -p 8080:8080 eg:0.9
 ```
+## Heads Up!
+* [Not to use localhost but to use 0.0.0.0 as gulf address](https://stackoverflow.com/questions/72978008/accessing-docker-ports-from-browser-localhost8000-doesnt-work)

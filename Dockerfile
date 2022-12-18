@@ -17,5 +17,6 @@ COPY . ./
 RUN go build go-backend
 
 EXPOSE 8080
+EXPOSE 80
 
 CMD ["go", "run", "main.go", "serve"]
