@@ -1,21 +1,21 @@
-FROM golang:1.18-alpine AS builder
+FROM golang:1.18.2 AS builder
+MAINTAINER "Sigrid Jin"
 
-WORKDIR /app
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
 
-COPY . .
+WORKDIR /build
 
+# download the required Go dependencies
+COPY go.mod ./
+COPY go.sum ./
 RUN go mod download
+COPY . ./
 
-RUN go build -o /go-backend
-
-FROM gcr.io/distroless/base-debian10 AS runner
-
-WORKDIR /
-
-COPY --from=builder /go-backend /go-backend
+RUN go build go-backend
 
 EXPOSE 8080
 
-USER nonroot:nonroot
-
-ENTRYPOINT ["/go-backend"]
+CMD ["go", "run", "main.go", "serve"]
